@@ -22,9 +22,9 @@ body {
   align-items: center;
 }
 
-/* Glass Card */
 .card {
-  background: rgba(255, 255, 255, 0.18);
+  position: relative;
+  background: rgba(255,255,255,0.18);
   backdrop-filter: blur(14px);
   padding: 28px;
   border-radius: 20px;
@@ -32,10 +32,22 @@ body {
   text-align: center;
   color: #fff;
   box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-  z-index: 10;
+  z-index: 5;
 }
 
-.card h1 {
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 22px;
+  background: linear-gradient(45deg, #ff9ad5, #c77dff, #ff9ad5);
+  filter: blur(20px);
+  z-index: -1;
+}
+
+.name {
+  position: relative;
+  display: inline-block;
   font-size: 26px;
   margin-bottom: 15px;
 }
@@ -46,15 +58,13 @@ body {
   margin-bottom: 12px;
 }
 
-/* Flying Hearts */
-.heart {
+.bg-heart {
   position: absolute;
-  color: rgba(255,255,255,0.8);
-  font-size: 18px;
-  animation: floatUp linear infinite;
+  color: rgba(255,255,255,0.6);
+  animation: bgFloat linear infinite;
 }
 
-@keyframes floatUp {
+@keyframes bgFloat {
   0% {
     transform: translateY(100vh) scale(0.8);
     opacity: 0;
@@ -68,15 +78,27 @@ body {
   }
 }
 
-/* Glow effect */
-.card::after {
-  content: "";
+.name-heart {
   position: absolute;
-  inset: -2px;
-  border-radius: 22px;
-  background: linear-gradient(45deg, #ff9ad5, #c77dff, #ff9ad5);
-  filter: blur(20px);
-  z-index: -1;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+  animation: nameFloat 3s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes nameFloat {
+  0% {
+    transform: translate(-50%, 0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -140px) scale(1.4);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -84,7 +106,7 @@ body {
 <body>
 
 <div class="card">
-  <h1>❤️ Siddhi ❤️</h1>
+  <h1 class="name">❤️ Siddhi ❤️</h1>
 
   <p>Jab tum saath hoti ho,<br>
   toh duniya thodi easy lagti hai.</p>
@@ -93,32 +115,36 @@ body {
   bas dil se ye kehna hai —<br>
   main apni poori life tumhare saath hi chalna chahta hoon.</p>
 
-  <p>Main ye nahi kehta ki sab kuch hamesha perfect hoga,<br>
-  par har mushkil mein tera haath pakd ke khada rahunga.</p>
+  <p>par har mushkil mein tera haath pakd ke khada rahunga.</p>
 
   <p>Tumhari muskaan meri taqat hai,<br>
   aur tumhari khamoshi bhi mujhe apni si lgti hai.</p>
 </div>
 
 <script>
-function createHeart() {
+function createBgHeart() {
   const heart = document.createElement("div");
-  heart.classList.add("heart");
+  heart.className = "bg-heart";
   heart.innerHTML = "❤️";
-
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-  heart.style.fontSize = (14 + Math.random() * 20) + "px";
-
+  heart.style.fontSize = 14 + Math.random() * 20 + "px";
+  heart.style.animationDuration = 4 + Math.random() * 4 + "s";
   document.body.appendChild(heart);
-
-  setTimeout(() => {
-    heart.remove();
-  }, 8000);
+  setTimeout(() => heart.remove(), 8000);
 }
+setInterval(createBgHeart, 250);
 
-// Continuous heart rain
-setInterval(createHeart, 250);
+const nameEl = document.querySelector(".name");
+function createNameHeart() {
+  const heart = document.createElement("span");
+  heart.className = "name-heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = 40 + Math.random() * 20 + "%";
+  heart.style.fontSize = 14 + Math.random() * 12 + "px";
+  nameEl.appendChild(heart);
+  setTimeout(() => heart.remove(), 3000);
+}
+setInterval(createNameHeart, 600);
 </script>
 
 </body>
